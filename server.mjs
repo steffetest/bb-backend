@@ -9,7 +9,7 @@ import notificationRouter from "./routes/notification-routes.mjs"
 import { errorHandler } from "./middleware/errorHandler.mjs";
 import requestsRouter from "./routes/request-routes.mjs"
 
-dotenv.config({path: "./config/config.env"});
+dotenv.config();
 
 connectDb();
 
