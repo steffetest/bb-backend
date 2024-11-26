@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 
 const driverLicenseSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
-        unique: true
     },
     lastName: {
         type: String,
@@ -29,12 +27,9 @@ const driverLicenseSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-
 });
 
-// driverLicenseSchema.pre("save", async function(next) {
-
-//     this.name = await bcrypt.hash(this.name, 12);
-// });
+// Compound index to ensure uniqueness of licenseType per user
+driverLicenseSchema.index({ user: 1, licenseType: 1 }, { unique: true });
 
 export default mongoose.model("DriverLicense", driverLicenseSchema);

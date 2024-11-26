@@ -1,5 +1,4 @@
 import { asyncHandler } from "../middleware/asyncHandler.mjs";
-import DriverLicense from "../models/DriverLicenseSchema.mjs";
 import ErrorResponse from "../models/ErrorResponseModel.mjs";
 import User from "../models/UserSchema.mjs";
 
@@ -44,19 +43,3 @@ const createAndSendToken = (user, statusCode, res) => {
 
   res.status(statusCode).json({success: true, statusCode, token});
 };
-
-export const getDriversLicense = asyncHandler(async (req, res, next) => {
-  const license = await DriverLicense.findOne({ user: req.user.id });
-
-  if (!license) {
-    return res.status(404).json({
-      success: false,
-      message: "No driver's license has been added"
-    });
-  }
-
-  res.status(200).json({
-    success: true,
-    data: license
-  });
-});
