@@ -5,7 +5,9 @@ import User from "../models/UserSchema.mjs";
 export const register = asyncHandler(async (req, res, next) => {
   const {name, email, password} = req.body;
 
-  const user = await User.create({name, email, password});
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const user = await User.create({name, email: normalizedEmail, password});
 
   createAndSendToken(user, 201, res);
 });
@@ -13,11 +15,13 @@ export const register = asyncHandler(async (req, res, next) => {
 export const login = asyncHandler(async (req, res, next) => {
   const {email, password} = req.body;
 
-  if (!email || !password) {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (!normalizedEmail || !password) {
     return next(new ErrorResponse("Please enter email and password", 400));
   }
 
-  const user = await User.findOne({email}).select("+password");
+  const user = await User.findOne({email: normalizedEmail}).select("+password");
 
   if (!user) {
     return next(new ErrorResponse("Invalid email/password", 401));
